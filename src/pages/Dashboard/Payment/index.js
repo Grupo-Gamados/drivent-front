@@ -2,6 +2,7 @@ import Options from './Options';
 import SubTitle from './Subtitle';
 import Title from './Title';
 import ReserveButton from './ReserveButton';
+import CreditCard from './CreditCard';
 
 export default function Payment() {
   return (
@@ -10,6 +11,8 @@ export default function Payment() {
       <SubTitle>Primeiro, escolha sua modalidade de ingresso</SubTitle>
       <Options />
       <ReserveButton></ReserveButton>
+      <SubTitle>Pagamento</SubTitle>
+      <CreditCard />
     </>
   );
 }

@@ -22,7 +22,7 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 width: 100%;
-height: 70%;
+height: 85%;
 `;
 
 const SubTitle = styled.div`

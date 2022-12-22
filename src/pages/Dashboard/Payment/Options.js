@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import TicketContext from '../../../contexts/TicketContext';
-import useTicketType from '../../../hooks/api/useTicket';
+import useTicketType from '../../../hooks/api/useTicketType';
 import OptionBox from './OptionBox';
 import SubTitle from './Subtitle';
 

@@ -1,35 +1,36 @@
-import styled from 'styled-components';
+import Hotels from './Hotels';
+import Title from './Title';
+import SubTitle from './Subtitle';
+import useTicket from '../../../hooks/api/useTicket';
+import Message from './Message';
 
 export default function Hotel() {
-  return <>
-    <Title>Escolha de hotel e quarto</Title>
-    <SubTitleBox>
-      <SubTitle>Sua modalidade de ingresso não inclui hospedagem</SubTitle>
-      <SubTitle>Prossiga para a escolha de atividades</SubTitle>
-    </SubTitleBox>
-  </>;
-}
+  const { ticket } = useTicket();
 
-const Title = styled.h1`
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-size: 34px;
-  margin-bottom: 30px;
-  color: #000000;
-`;
-const SubTitleBox = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-width: 100%;
-height: 70%;
-`;
-
-const SubTitle = styled.div`
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-size: 20px;
-  color: #8e8e8e;
-  b{
-    font-weight: 700;
+  function wrongTicketMessage() {
+    if (ticket) {
+      if (ticket.status.toLowerCase() !== 'paid') {
+        return 'Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem';
+      } else return 'Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades';
+    }
   }
-`;
+
+  return ticket ? (
+    <>
+      <Title>Escolha de hotel e quarto</Title>
+      {ticket.status.toLowerCase() === 'paid' && ticket.TicketType.includesHotel ? (
+        <>
+          <SubTitle>Primeiro, escolha seu hotel</SubTitle>
+          <Hotels></Hotels>
+        </>
+      ) : (
+        <Message text={wrongTicketMessage()}></Message>
+      )}
+    </>
+  ) : (
+    <>
+      <Title>Escolha de hotel e quarto</Title>
+      <Message text={'Você deve primeiro reservar e pagar um ingresso'}></Message>
+    </>
+  );
+}

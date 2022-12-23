@@ -9,6 +9,7 @@ import FillSubscription from './pages/Dashboard/FillSubscription';
 import Payment from './pages/Dashboard/Payment';
 import Hotel from './pages/Dashboard/Hotel';
 import Activities from './pages/Dashboard/Activities';
+import ActivitiesOfTheDay from './pages/Dashboard/Activities/activitiesOfTheDay';
 import Certificate from './pages/Dashboard/Certificate';
 
 import { EventInfoProvider } from './contexts/EventInfoContext';
@@ -44,6 +45,7 @@ export default function App() {
                     <Route path="payment" element={<Payment />} />
                     <Route path="hotel" element={<Hotel />} />
                     <Route path="activities" element={<Activities />} />
+                    <Route path="activities/:dayId" element={<ActivitiesOfTheDay />} />
                     <Route path="certificate" element={<Certificate />} />
                     <Route index path="*" element={<Navigate to="/dashboard/subscription" />} />
                   </Route>

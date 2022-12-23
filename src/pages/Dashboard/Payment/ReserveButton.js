@@ -12,7 +12,8 @@ export default function ReserveButton() {
 
   const token = useToken();
   async function createTicket(ticketTypeId) {
-    return await postTicket(ticketTypeId, token);
+    await postTicket(ticketTypeId, token);
+    window.location.reload(false);
   }
 
   return ticketTypes ? (

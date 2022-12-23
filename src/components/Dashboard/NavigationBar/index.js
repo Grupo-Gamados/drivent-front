@@ -62,7 +62,8 @@ const Container = styled.div`
   flex-shrink: 0;
   justify-content: flex-start;
 
-  > a {
+  > a,
+  href {
     text-decoration: none;
   }
 

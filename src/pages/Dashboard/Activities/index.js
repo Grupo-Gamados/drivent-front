@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import useEventDays from '../../../hooks/api/useEventDays';
+import { Link } from 'react-router-dom';
 
 export default function Activities() {
   const { eventDays, eventDaysError } = useEventDays();
@@ -31,7 +32,11 @@ export default function Activities() {
         <SubTitle>Primeiro, filtre pelo dia do evento: </SubTitle>
         <DaysBox>
           {eventDays !== null ? (
-            eventDays.map((day, index) => <Button key={index}>{day.name}</Button>)
+            eventDays.map((day, index) => (
+              <Link key={index} to={`/dashboard/activities/${day.id}`}>
+                <Button>{day.name}</Button>
+              </Link>
+            ))
           ) : (
             <h1>Este evento não possui atividades</h1>
           )}

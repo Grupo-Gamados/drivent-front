@@ -6,7 +6,6 @@ import Message from './Message';
 
 export default function Hotel() {
   const { ticket } = useTicket();
-
   function wrongTicketMessage() {
     if (ticket) {
       if (ticket.status.toLowerCase() !== 'paid') {

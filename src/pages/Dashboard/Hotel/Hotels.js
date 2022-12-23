@@ -8,7 +8,9 @@ export default function Hotels() {
   return (
     <Wrapper>
       {hotels
-        ? hotels.map((hotel) => <HotelWrapper key={hotel.id} img={hotel.image} title={hotel.name}></HotelWrapper>)
+        ? hotels.map((hotel) => (
+          <HotelWrapper key={hotel.id} id={hotel.id} img={hotel.image} title={hotel.name}></HotelWrapper>
+        ))
         : ''}
     </Wrapper>
   );

@@ -5,6 +5,9 @@ import * as activitiesApi from '../../../services/activitiesApi';
 import useToken from '../../../hooks/useToken';
 import React from 'react';
 import vagas from '../../../assets/images/vagas.svg';
+import soldOff from '../../../assets/images/lotado.svg';
+
+import { Title, DaysBox, Button } from './index';
 
 export default function ActivitiesOfTheDay() {
   const token = useToken();
@@ -12,9 +15,16 @@ export default function ActivitiesOfTheDay() {
   const { dayId } = useParams();
   const dayIdNum = parseInt(dayId);
   const [listActivities, setListActivities] = React.useState([]);
+
   const actsAudPrincipal = listActivities.filter((act) => act.localId === 1);
   const actsAudLateral = listActivities.filter((act) => act.localId === 2);
   const actsSala = listActivities.filter((act) => act.localId === 3);
+
+  const listLocalsForMap = [
+    { title: 'Auditório Principal', listActivities: actsAudPrincipal },
+    { title: 'Auditório Lateral', listActivities: actsAudLateral },
+    { title: 'Sala de Workshop', listActivities: actsSala },
+  ];
 
   // eslint-disable-next-line no-lone-blocks
   {
@@ -27,10 +37,6 @@ export default function ActivitiesOfTheDay() {
     ) : (
       <h1>Este evento não possui atividades</h1>
     );
-  }
-
-  function teste() {
-    console.log('funcionando');
   }
 
   // eslint-disable-next-line space-before-function-paren
@@ -75,65 +81,35 @@ export default function ActivitiesOfTheDay() {
           )}
         </DaysBox>
         <ContainerActivity>
-          <ContainerLocal>
-            <TitleLocal>Auditório Principal</TitleLocal>
-            <BoxLocal>
-              {actsAudPrincipal.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
-
-          <ContainerLocal>
-            <TitleLocal>Auditório Lateral</TitleLocal>
-            <BoxLocal>
-              {actsAudLateral.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
-
-          <ContainerLocal>
-            <TitleLocal>Sala de Workshop</TitleLocal>
-            <BoxLocal>
-              {actsSala.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
+          {listLocalsForMap.map((local, index) => (
+            <ContainerLocal key={index}>
+              <TitleLocal>{local.title}</TitleLocal>
+              <BoxLocal>
+                {local.listActivities.map((activity, index) => (
+                  <Activity key={index} alturaDiv={`${activity.duration}`}>
+                    <Descricao>
+                      <h1>{activity.name}</h1>
+                      <h2>
+                        {activity.startTime} - {activity.endTime}
+                      </h2>
+                    </Descricao>
+                    <Vagas>
+                      {activity.totalVagas === 0 ? (
+                        <img src={soldOff} alt="esgotado"></img>
+                      ) : (
+                        <img src={vagas} alt="vagas"></img>
+                      )}
+                      {activity.totalVagas === 0 ? (
+                        <TextVagas fontColor={'#CC6666'}>Esgotado</TextVagas>
+                      ) : (
+                        <TextVagas fontColor={'#078632'}>{activity.totalVagas} vagas</TextVagas>
+                      )}
+                    </Vagas>
+                  </Activity>
+                ))}
+              </BoxLocal>
+            </ContainerLocal>
+          ))}
         </ContainerActivity>
       </>
     );
@@ -154,38 +130,6 @@ const ErrorMessage = styled.div`
     color: #8e8e8e;
     width: 55%;
     line-height: 23px;
-  }
-`;
-
-const Title = styled.h1`
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-size: 34px;
-  margin-bottom: 30px;
-  color: #000000;
-`;
-
-const DaysBox = styled.div`
-  display: flex;
-  gap: 17px;
-`;
-
-const Button = styled.div`
-  height: 37px;
-  width: 130px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  border: none;
-  outline: none;
-  :hover {
-    background-color: #ffd37d;
   }
 `;
 
@@ -256,10 +200,10 @@ const Vagas = styled.div`
   justify-content: center;
   align-items: center;
   border-left: 1px solid #cfcfcf;
+`;
 
-  h1 {
-    color: #078632;
-    font-size: 9px;
-    margin-top: 5px;
-  }
+const TextVagas = styled.h1`
+  font-size: 9px;
+  margin-top: 5px;
+  color: ${(props) => props.fontColor};
 `;

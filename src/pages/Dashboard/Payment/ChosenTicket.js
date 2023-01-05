@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SubTitle from './Subtitle';
 import useTicket from '../../../hooks/api/useTicket';
+import CreditCard from './CreditCard';
 
 export default function ChosenTicket() {
   const { ticket } = useTicket();
@@ -15,6 +16,7 @@ export default function ChosenTicket() {
         </h1>{' '}
         <h2>R$ {!ticket ? '' : ticket.TicketType.price}</h2>
       </TicketWrapper>
+
     </>
   ) : (
     ''

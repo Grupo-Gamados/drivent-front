@@ -1,4 +1,5 @@
 import useTicket from '../hooks/api/useTicket';
+import useToken from '../hooks/useToken';
 import api from './api';
 
 export async function postTicketPaid(ticketId, cardData, token) {
@@ -20,3 +21,12 @@ export async function updateTicketToPaid(token) {
   });
   return response.data;
 }
+
+export default function useTicketPaid() {
+  const token = useToken();
+
+  const {
+    data: ticketData,
+    act: getTicket,
+  } = (() => useTicket.getTicket(token));
+};

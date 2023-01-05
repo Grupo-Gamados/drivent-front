@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-card-component/dist/styles-compiled.css';
 import styled from 'styled-components';
@@ -10,9 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import useToken from '../../../hooks/useToken';
 import { postTicketPaid } from '../../../services/paymentApi';
 import { SucessfulyPaid } from './Sucessfulypaid';
+import useTicketPaid from '../../../services/paymentApi';
 
 export default function CreditCard() {
   const token = useToken();
+  const { ticketData } = useTicketPaid();
   const { ticket } = useTicket();
   const [paid, setPaid] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -43,6 +45,11 @@ export default function CreditCard() {
       alert('Pagamento realizado com sucesso!!!');
       setPaid(true);
       navigate('/dashboard/hotel', { state: { paid: true, ticket: ticket } });
+      useEffect(() => {
+        if (ticketData?.status == 'PAID') {
+          paid(false);
+        }
+      }, []);
     } catch (error) {
       alert('Pagamento não realizado! Verifique o preenchimento dos campos!');
     }

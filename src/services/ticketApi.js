@@ -1,3 +1,4 @@
+import useToken from '../hooks/useToken';
 import api from './api';
 
 export async function getTicketTypes(token) {
@@ -30,4 +31,3 @@ export async function getTicket(token) {
 
   return response.data;
 }
-//

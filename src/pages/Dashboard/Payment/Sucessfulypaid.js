@@ -4,11 +4,13 @@ import { FaCheckCircle } from 'react-icons/fa';
 export function SucessfulyPaid() {
   return (
     <>
-      <FaCheckCircle />
-      <SucessWraper>
-        <StyledConfirm variant="h6" color='#454545' weight='700' >Pagamento confirmado</StyledConfirm>
-        <StyledConfirm variant="h6" color='#8E8E8E' weight='500' >Prossiga para a escolha de hospedagem e atividades</StyledConfirm>
-      </SucessWraper>
+      <StyledScreen>
+        <FaCheckCircle />
+        <SucessWraper>
+          <StyledConfirm variant="h6" color='#454545' weight='700' >Pagamento confirmado</StyledConfirm>
+          <StyledConfirm variant="h6" color='#8E8E8E' weight='500' >Prossiga para a escolha de hospedagem e atividades</StyledConfirm>
+        </SucessWraper>
+      </StyledScreen>
     </>
   );
 }

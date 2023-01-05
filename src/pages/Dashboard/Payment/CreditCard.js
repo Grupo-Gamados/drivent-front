@@ -9,6 +9,7 @@ import useTicket from '../../../hooks/api/useTicket';
 import { useNavigate } from 'react-router-dom';
 import useToken from '../../../hooks/useToken';
 import { postTicketPaid } from '../../../services/paymentApi';
+import { SucessfulyPaid } from './Sucessfulypaid';
 
 export default function CreditCard() {
   const token = useToken();
@@ -25,6 +26,7 @@ export default function CreditCard() {
   const navigate = useNavigate();
 
   const SubmitActionConfirm = (e) => {
+    console.log('chegou aqui');
     e.preventDefault();
 
     const body = {
@@ -32,10 +34,10 @@ export default function CreditCard() {
       ticketTypeId: ticket.id,
       cardData: {
         ...paymentData,
-        // issuer: Payment.fns.cardType(paymentData.number)
+        issuer: Payment.fns.cardType(paymentData.number)
       }
     };
-
+    console.log(2);
     try {
       postTicketPaid(body, token);
       alert('Pagamento realizado com sucesso!!!');
@@ -49,19 +51,23 @@ export default function CreditCard() {
   return (
     <>
       <SubTitle>Pagamento</SubTitle>
-      {paid ? <h1>Pagamento confirmado</h1> :
+      {paid ?
+        <>
+          <SucessfulyPaid />
+        </>
+        :
         <CreditCardWrapper>
-          <CardBox>
-            <MyCard>
-              <Cards
-                number={paymentData.number}
-                name={paymentData.name}
-                expiry={paymentData.expiry}
-                cvc={paymentData.cvc}
-                focused={paymentData.focus} />
-            </MyCard>
-            <MyCard2>
-              <Form onSubmit={SubmitActionConfirm}>
+          <Form onSubmit={SubmitActionConfirm}>
+            <CardBox>
+              <MyCard>
+                <Cards
+                  number={paymentData.number}
+                  name={paymentData.name}
+                  expiry={paymentData.expiry}
+                  cvc={paymentData.cvc}
+                  focused={paymentData.focus} />
+              </MyCard>
+              <MyCard2>
                 <Input
                   type="tel"
                   name="number"
@@ -98,17 +104,17 @@ export default function CreditCard() {
                     onFocus={(e) => setFocus(e.target.name)}
                   />
                 </LastBox>
-              </Form>
-            </MyCard2>
-          </CardBox>
+              </MyCard2>
+            </CardBox>
+            <Button
+              type="submit"
+              onClick={(e) => SubmitActionConfirm(e)}
+            >Finalizar pagamento</Button>
+          </Form>
         </CreditCardWrapper>
       }
-      <Button
-        type="submit"
-
-        onClick={(e) => SubmitActionConfirm}
-      >Finalizar Pagamento</Button>
     </>
+
   );
 }
 const Form = styled.form``;
@@ -133,11 +139,8 @@ const CreditCardWrapper = styled.div`
 const CardBox = styled.div`
   height: 225px;
   width: 100%;
-   //background-color: red; 
   border-radius: 0px;
   display: flex;
-  //justify-content: center;
-  //align-items: center;
 `;
 
 const MyCard = styled.div`

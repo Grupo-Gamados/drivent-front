@@ -9,7 +9,6 @@ import useTicketType from '../../../hooks/api/useTicketType';
 export default function ReserveButton() {
   const { ticketTypeSelected, includesHotel } = useContext(TicketContext);
   const { ticketTypes } = useTicketType();
-  console.log(ticketTypes);
   const token = useToken();
   async function createTicket(ticketTypeId) {
     await postTicket(ticketTypeId, token);

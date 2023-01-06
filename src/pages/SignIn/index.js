@@ -13,6 +13,7 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import GithubButton from '../../components/Form/GithubButton';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -50,6 +51,7 @@ export default function SignIn() {
           <Input label="E-mail" type="text" fullWidth value={email} onChange={e => setEmail(e.target.value)} />
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
+          <GithubButton color="primary" fullWidth disabled={loadingSignIn}>Entrar com Github</GithubButton>
         </form>
       </Row>
       <Row>

@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import * as Payment from 'payment';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-card-component/dist/styles-compiled.css';
-import { postTicketPaid } from '../../../services/paymentApi';
+import postTicketPaid from '../../../services/paymentApi';
+import useToken from '../../../hooks/useToken';
 
 export default function PaymentForm({ ticketData, setShowPaymentForm }) {
   const navigate = useNavigate();
+  const token = useToken();
   const ticketId = ticketData?.id;
   const [issuer, setIssuer] = useState('');
   const [cardData, setCardData] = useState({
@@ -43,7 +45,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
       cardData: { ...newCardData },
     };
     try {
-      const result = await postTicketPaid();
+      const result = postTicketPaid({ paymentBody });
       alert('Ticket pago com sucesso!');
       setShowPaymentForm(false);
     } catch (error) {

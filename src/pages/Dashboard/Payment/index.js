@@ -6,6 +6,7 @@ import ChosenTicket from './ChosenTicket';
 import useTicket from '../../../hooks/api/useTicket';
 import { useContext, useEffect, useState } from 'react';
 import TicketContext from '../../../contexts/TicketContext';
+import CreditCard from './CreditCard';
 
 export default function Payment() {
   const { ticket } = useTicket();
@@ -23,7 +24,10 @@ export default function Payment() {
     <>
       <Title>Ingresso e pagamento</Title>
       {ticket ? (
-        <ChosenTicket />
+        <>
+          <ChosenTicket />
+          <CreditCard />
+        </>
       ) : (
         <>
           {' '}

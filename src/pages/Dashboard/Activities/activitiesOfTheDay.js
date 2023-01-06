@@ -4,8 +4,9 @@ import { Link, useParams } from 'react-router-dom';
 import * as activitiesApi from '../../../services/activitiesApi';
 import useToken from '../../../hooks/useToken';
 import React from 'react';
-import vagas from '../../../assets/images/vagas.svg';
+import vacancies from '../../../assets/images/vagas.svg';
 import soldOff from '../../../assets/images/lotado.svg';
+import registered from '../../../assets/images/registered.svg';
 
 import { Title, DaysBox, Button } from './index';
 
@@ -44,6 +45,15 @@ export default function ActivitiesOfTheDay() {
     const response = await activitiesApi.getActivities(token, dayIdNum);
     setListActivities(response.data);
   }, [dayIdNum]);
+
+  async function postRegister(activityId) {
+    try {
+      await activitiesApi.postRegister(token, activityId);
+      window.location.reload(false);
+    } catch (error) {
+      alert('Você já se inscreveu em outra atividade que conflita com o horário desta');
+    }
+  }
 
   // eslint-disable-next-line eqeqeq
   if (eventDaysError == 'Error: Request failed with status code 402') {
@@ -86,26 +96,42 @@ export default function ActivitiesOfTheDay() {
               <TitleLocal>{local.title}</TitleLocal>
               <BoxLocal>
                 {local.listActivities.map((activity, index) => (
-                  <Activity key={index} alturaDiv={`${activity.duration}`}>
-                    <Descricao>
-                      <h1>{activity.name}</h1>
-                      <h2>
-                        {activity.startTime} - {activity.endTime}
-                      </h2>
-                    </Descricao>
-                    <Vagas>
-                      {activity.totalVagas === 0 ? (
-                        <img src={soldOff} alt="esgotado"></img>
-                      ) : (
-                        <img src={vagas} alt="vagas"></img>
-                      )}
-                      {activity.totalVagas === 0 ? (
-                        <TextVagas fontColor={'#CC6666'}>Esgotado</TextVagas>
-                      ) : (
-                        <TextVagas fontColor={'#078632'}>{activity.totalVagas} vagas</TextVagas>
-                      )}
-                    </Vagas>
-                  </Activity>
+                  <BoxActivity key={index} alturaDiv={`${activity.duration}`}>
+                    {activity.isRegistered === true ? (
+                      <Activity colorDiv={'#D0FFDB'}>
+                        <Descricao>
+                          <h1>{activity.name}</h1>
+                          <h2>
+                            {activity.startTime} - {activity.endTime}
+                          </h2>
+                        </Descricao>
+                        <Vacancies>
+                          <img src={registered} alt="registered"></img>
+                          <TextVacancies fontColor={'#078632'}>Inscrito </TextVacancies>
+                        </Vacancies>
+                      </Activity>
+                    ) : (
+                      <Activity alturaDiv={`${activity.duration}`} colorDiv={'#f1f1f1'}>
+                        <Descricao>
+                          <h1>{activity.name}</h1>
+                          <h2>
+                            {activity.startTime} - {activity.endTime}
+                          </h2>
+                        </Descricao>
+                        {activity.vacancies === 0 ? (
+                          <Vacancies>
+                            <img src={soldOff} alt="esgotado"></img>
+                            <TextVacancies fontColor={'#CC6666'}>Esgotado</TextVacancies>
+                          </Vacancies>
+                        ) : (
+                          <Vacancies onClick={() => postRegister(activity.id)}>
+                            <img src={vacancies} alt="vacancies"></img>
+                            <TextVacancies fontColor={'#078632'}>{activity.vacancies} vagas</TextVacancies>
+                          </Vacancies>
+                        )}
+                      </Activity>
+                    )}
+                  </BoxActivity>
                 ))}
               </BoxLocal>
             </ContainerLocal>
@@ -167,10 +193,15 @@ const BoxLocal = styled.div`
   padding: 5% 0;
 `;
 
-const Activity = styled.div`
+const BoxActivity = styled.div`
   width: 90%;
   height: ${(props) => props.alturaDiv * 80}px;
-  background-color: #f1f1f1;
+`;
+
+const Activity = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.colorDiv}; /* #f1f1f1;#D0FFDB */
   border-radius: 5px;
   display: flex;
 `;
@@ -191,7 +222,7 @@ const Descricao = styled.div`
   }
 `;
 
-const Vagas = styled.div`
+const Vacancies = styled.div`
   width: 30%;
   min-height: 70%;
   margin: 10px 0;
@@ -200,9 +231,10 @@ const Vagas = styled.div`
   justify-content: center;
   align-items: center;
   border-left: 1px solid #cfcfcf;
+  cursor: pointer;
 `;
 
-const TextVagas = styled.h1`
+const TextVacancies = styled.h1`
   font-size: 9px;
   margin-top: 5px;
   color: ${(props) => props.fontColor};

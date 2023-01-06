@@ -1,4 +1,4 @@
-import React, { useState, useNavigate } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as Payment from 'payment';
 import Cards from 'react-credit-cards-2';
@@ -7,7 +7,6 @@ import postTicketPaid from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
 
 export default function PaymentForm({ ticketData, setShowPaymentForm }) {
-  //const navigate = useNavigate();
   const token = useToken();
   const ticketId = ticketData?.id;
   const [issuer, setIssuer] = useState('');

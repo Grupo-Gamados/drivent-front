@@ -7,7 +7,7 @@ import postTicketPaid from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
 
 export default function PaymentForm({ ticketData, setShowPaymentForm }) {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const token = useToken();
   const ticketId = ticketData?.id;
   const [issuer, setIssuer] = useState('');

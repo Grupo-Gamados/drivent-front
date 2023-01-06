@@ -22,11 +22,3 @@ export async function updateTicketToPaid(token) {
   return response.data;
 }
 
-export default function useTicketPaid() {
-  const token = useToken();
-
-  const {
-    data: ticketData,
-    act: getTicket,
-  } = (() => useTicket.getTicket(token));
-};

@@ -10,11 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import useToken from '../../../hooks/useToken';
 import { postTicketPaid } from '../../../services/paymentApi';
 import { SucessfulyPaid } from './Sucessfulypaid';
-import useTicketPaid from '../../../services/paymentApi';
 
 export default function CreditCard() {
   const token = useToken();
-  const { ticketData } = useTicketPaid();
   const { ticket } = useTicket();
   const [paid, setPaid] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -26,11 +24,8 @@ export default function CreditCard() {
   });
   const [focus, setFocus] = useState('');
   const navigate = useNavigate();
-
-  const SubmitActionConfirm = (e) => {
-    console.log('chegou aqui');
+  async function SubmitActionConfirm(e) {
     e.preventDefault();
-
     const body = {
       focus,
       ticketTypeId: ticket.id,
@@ -39,17 +34,11 @@ export default function CreditCard() {
         issuer: Payment.fns.cardType(paymentData.number)
       }
     };
-    console.log(2);
     try {
-      postTicketPaid(body, token);
+      await postTicketPaid(body, token);
       alert('Pagamento realizado com sucesso!!!');
       setPaid(true);
       navigate('/dashboard/hotel', { state: { paid: true, ticket: ticket } });
-      useEffect(() => {
-        if (ticketData?.status == 'PAID') {
-          paid(false);
-        }
-      }, []);
     } catch (error) {
       alert('Pagamento não realizado! Verifique o preenchimento dos campos!');
     }
@@ -76,36 +65,44 @@ export default function CreditCard() {
               </MyCard>
               <MyCard2>
                 <Input
+                  required
                   type="tel"
                   name="number"
                   placeholder="Card Number"
+                  pattern="[\d| ]{16,22}"
                   value={paymentData.number}
                   onChange={(e) => setPaymentData({ ...paymentData, number: e.target.value })}
                   onFocus={(e) => setFocus(e.target.name)}
                 />
                 <Description>E.g.: 42..., 51..., 36..., 37...</Description>
                 <Input
+                  required
                   type="text"
                   name="name"
                   placeholder="Name"
                   value={paymentData.name}
-                  required
                   onChange={(e) => setPaymentData({ ...paymentData, name: e.target.value })}
                   onFocus={(e) => setFocus(e.target.name)}
                 />
                 <LastBox>
                   <InputValidThru
+                    required
                     type="text"
                     name="expiry"
                     placeholder="Valid Thru"
+                    pattern="\d\d/\d\d"
+                    maxLength={4}
                     value={paymentData.expiry}
                     onChange={(e) => setPaymentData({ ...paymentData, expiry: e.target.value })}
                     onFocus={(e) => setFocus(e.target.name)}
                   />
                   <InputCVV
+                    required
                     type="tel"
                     name='cvc'
                     placeholder="CVV"
+                    pattern="\d{3,4}"
+                    maxLength={4}
                     value={paymentData.cvc}
                     onChange={e => setPaymentData({ ...paymentData, cvc: e.target.value })}
                     onFocus={(e) => setFocus(e.target.name)}
@@ -115,7 +112,7 @@ export default function CreditCard() {
             </CardBox>
             <Button
               type="submit"
-              onClick={(e) => SubmitActionConfirm(e)}
+              onClick={async(e) => SubmitActionConfirm(e)}
             >Finalizar pagamento</Button>
           </Form>
         </CreditCardWrapper>

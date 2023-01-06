@@ -5,9 +5,11 @@ import Cards from 'react-credit-cards-2';
 import 'react-credit-card-component/dist/styles-compiled.css';
 import postTicketPaid from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
+import useSavePayment from '../../../services/hookPayment';
 
 export default function PaymentForm({ ticketData, setShowPaymentForm }) {
   const token = useToken();
+  const { postTicketPaid } = useSavePayment();
   const ticketId = ticketData?.id;
   const [issuer, setIssuer] = useState('');
   const [cardData, setCardData] = useState({

@@ -68,6 +68,7 @@ justify-content: center;
 align-items: center;
 margin: auto;
 width: 200px;
+background-color: red;
 `;
 
 export default PaypalCheckoutButton;

@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import SubTitle from './Subtitle';
 import useTicket from '../../../hooks/api/useTicket';
 import CreditCard from './CreditCard';
+import { useState, useEffect } from 'react';
 
 export default function ChosenTicket() {
   const { ticket } = useTicket();
+
   return ticket ? (
     <>
       <SubTitle>Ingresso escolhido</SubTitle>

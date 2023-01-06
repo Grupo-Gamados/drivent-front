@@ -50,7 +50,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
       alert('Ticket pago com sucesso!');
       setShowPaymentForm(false);
     } catch (error) {
-      alert('Não foi possível pagar seu ticket!');
+      alert('Verifique os campos de pagamento!');
     }
   };
 

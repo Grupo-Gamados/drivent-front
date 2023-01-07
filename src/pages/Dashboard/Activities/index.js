@@ -63,7 +63,7 @@ const ErrorMessage = styled.div`
   }
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-size: 34px;
   margin-bottom: 30px;
@@ -80,12 +80,17 @@ const SubTitle = styled.h2`
   }
 `;
 
-const DaysBox = styled.div`
+export const DaysBox = styled.div`
   display: flex;
   gap: 17px;
+
+  > a,
+  href {
+    text-decoration: none;
+  }
 `;
 
-const Button = styled.div`
+export const Button = styled.div`
   height: 37px;
   width: 130px;
   border-radius: 4px;

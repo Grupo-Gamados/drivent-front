@@ -4,7 +4,11 @@ import { Link, useParams } from 'react-router-dom';
 import * as activitiesApi from '../../../services/activitiesApi';
 import useToken from '../../../hooks/useToken';
 import React from 'react';
-import vagas from '../../../assets/images/vagas.svg';
+import vacancies from '../../../assets/images/vagas.svg';
+import soldOff from '../../../assets/images/lotado.svg';
+import registered from '../../../assets/images/registered.svg';
+
+import { Title, DaysBox, Button } from './index';
 
 export default function ActivitiesOfTheDay() {
   const token = useToken();
@@ -12,9 +16,16 @@ export default function ActivitiesOfTheDay() {
   const { dayId } = useParams();
   const dayIdNum = parseInt(dayId);
   const [listActivities, setListActivities] = React.useState([]);
+
   const actsAudPrincipal = listActivities.filter((act) => act.localId === 1);
   const actsAudLateral = listActivities.filter((act) => act.localId === 2);
   const actsSala = listActivities.filter((act) => act.localId === 3);
+
+  const listLocalsForMap = [
+    { title: 'Auditório Principal', listActivities: actsAudPrincipal },
+    { title: 'Auditório Lateral', listActivities: actsAudLateral },
+    { title: 'Sala de Workshop', listActivities: actsSala },
+  ];
 
   // eslint-disable-next-line no-lone-blocks
   {
@@ -29,15 +40,20 @@ export default function ActivitiesOfTheDay() {
     );
   }
 
-  function teste() {
-    console.log('funcionando');
-  }
-
   // eslint-disable-next-line space-before-function-paren
   React.useEffect(async () => {
     const response = await activitiesApi.getActivities(token, dayIdNum);
     setListActivities(response.data);
   }, [dayIdNum]);
+
+  async function postRegister(activityId) {
+    try {
+      await activitiesApi.postRegister(token, activityId);
+      window.location.reload(false);
+    } catch (error) {
+      alert('Você já se inscreveu em outra atividade que conflita com o horário desta');
+    }
+  }
 
   // eslint-disable-next-line eqeqeq
   if (eventDaysError == 'Error: Request failed with status code 402') {
@@ -75,65 +91,51 @@ export default function ActivitiesOfTheDay() {
           )}
         </DaysBox>
         <ContainerActivity>
-          <ContainerLocal>
-            <TitleLocal>Auditório Principal</TitleLocal>
-            <BoxLocal>
-              {actsAudPrincipal.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
-
-          <ContainerLocal>
-            <TitleLocal>Auditório Lateral</TitleLocal>
-            <BoxLocal>
-              {actsAudLateral.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
-
-          <ContainerLocal>
-            <TitleLocal>Sala de Workshop</TitleLocal>
-            <BoxLocal>
-              {actsSala.map((activity, index) => (
-                <Activity key={index} alturaDiv={`${activity.duration}`}>
-                  <Descricao>
-                    <h1>{activity.name}</h1>
-                    <h2>
-                      {activity.startTime} - {activity.endTime}
-                    </h2>
-                  </Descricao>
-                  <Vagas>
-                    <img src={vagas} alt="vagas"></img>
-                    <h1>{activity.totalVagas} vagas</h1>
-                  </Vagas>
-                </Activity>
-              ))}
-            </BoxLocal>
-          </ContainerLocal>
+          {listLocalsForMap.map((local, index) => (
+            <ContainerLocal key={index}>
+              <TitleLocal>{local.title}</TitleLocal>
+              <BoxLocal>
+                {local.listActivities.map((activity, index) => (
+                  <BoxActivity key={index} alturaDiv={`${activity.duration}`}>
+                    {activity.isRegistered === true ? (
+                      <Activity colorDiv={'#D0FFDB'}>
+                        <Descricao>
+                          <h1>{activity.name}</h1>
+                          <h2>
+                            {activity.startTime} - {activity.endTime}
+                          </h2>
+                        </Descricao>
+                        <Vacancies>
+                          <img src={registered} alt="registered"></img>
+                          <TextVacancies fontColor={'#078632'}>Inscrito </TextVacancies>
+                        </Vacancies>
+                      </Activity>
+                    ) : (
+                      <Activity alturaDiv={`${activity.duration}`} colorDiv={'#f1f1f1'}>
+                        <Descricao>
+                          <h1>{activity.name}</h1>
+                          <h2>
+                            {activity.startTime} - {activity.endTime}
+                          </h2>
+                        </Descricao>
+                        {activity.vacancies === 0 ? (
+                          <Vacancies>
+                            <img src={soldOff} alt="esgotado"></img>
+                            <TextVacancies fontColor={'#CC6666'}>Esgotado</TextVacancies>
+                          </Vacancies>
+                        ) : (
+                          <Vacancies onClick={() => postRegister(activity.id)}>
+                            <img src={vacancies} alt="vacancies"></img>
+                            <TextVacancies fontColor={'#078632'}>{activity.vacancies} vagas</TextVacancies>
+                          </Vacancies>
+                        )}
+                      </Activity>
+                    )}
+                  </BoxActivity>
+                ))}
+              </BoxLocal>
+            </ContainerLocal>
+          ))}
         </ContainerActivity>
       </>
     );
@@ -154,38 +156,6 @@ const ErrorMessage = styled.div`
     color: #8e8e8e;
     width: 55%;
     line-height: 23px;
-  }
-`;
-
-const Title = styled.h1`
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-size: 34px;
-  margin-bottom: 30px;
-  color: #000000;
-`;
-
-const DaysBox = styled.div`
-  display: flex;
-  gap: 17px;
-`;
-
-const Button = styled.div`
-  height: 37px;
-  width: 130px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  border: none;
-  outline: none;
-  :hover {
-    background-color: #ffd37d;
   }
 `;
 
@@ -223,10 +193,15 @@ const BoxLocal = styled.div`
   padding: 5% 0;
 `;
 
-const Activity = styled.div`
+const BoxActivity = styled.div`
   width: 90%;
   height: ${(props) => props.alturaDiv * 80}px;
-  background-color: #f1f1f1;
+`;
+
+const Activity = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.colorDiv}; /* #f1f1f1;#D0FFDB */
   border-radius: 5px;
   display: flex;
 `;
@@ -247,7 +222,7 @@ const Descricao = styled.div`
   }
 `;
 
-const Vagas = styled.div`
+const Vacancies = styled.div`
   width: 30%;
   min-height: 70%;
   margin: 10px 0;
@@ -256,10 +231,11 @@ const Vagas = styled.div`
   justify-content: center;
   align-items: center;
   border-left: 1px solid #cfcfcf;
+  cursor: pointer;
+`;
 
-  h1 {
-    color: #078632;
-    font-size: 9px;
-    margin-top: 5px;
-  }
+const TextVacancies = styled.h1`
+  font-size: 9px;
+  margin-top: 5px;
+  color: ${(props) => props.fontColor};
 `;

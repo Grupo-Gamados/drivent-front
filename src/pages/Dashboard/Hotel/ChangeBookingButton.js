@@ -5,7 +5,7 @@ export default function ChangeBookingButton() {
 }
 
 const Button = styled.div`
-  height: 37px;
+  height: 36px;
   width: 200px;
   border-radius: 4px;
   margin-top: 32px;

@@ -5,23 +5,22 @@ import useRooms from '../../../hooks/api/useRooms';
 
 export default function HotelWrapper({ img, title, id }) {
   const [isSelected, setIsSelected] = useState(false);
-  const { hotelSelected, setHotelSelected } = useContext(HotelContext);
+  const { hotelSelected, setHotelSelected, setHotelSelectedId } = useContext(HotelContext);
   const { roomsByHotel } = useRooms(id);
   let hotelDescription = 'Single';
   let vacancies = 0;
   function getRoomDescription() {
     if (roomsByHotel) {
-      roomsByHotel.Rooms.forEach(room => {
+      roomsByHotel.Rooms.forEach((room) => {
         vacancies += Number(room.capacity);
         if (hotelDescription !== 'Single, Double e Triple' && Number(room.capacity) >= 3) {
           hotelDescription = 'Single, Double e Triple';
-        }
-        else if (hotelDescription !== 'Single e Double' && Number(room.capacity) === 2) {
+        } else if (hotelDescription !== 'Single e Double' && Number(room.capacity) === 2) {
           hotelDescription = 'Single e Double';
         }
       });
     }
-  };
+  }
 
   getRoomDescription();
 
@@ -29,9 +28,11 @@ export default function HotelWrapper({ img, title, id }) {
     if (hotelName !== hotelSelected) {
       setIsSelected(true);
       setHotelSelected(hotelName);
+      setHotelSelectedId(id);
     } else {
       setIsSelected(!isSelected);
       setHotelSelected('');
+      setHotelSelectedId(0);
     }
   }
 
@@ -77,14 +78,14 @@ const Wrapper = styled.div`
   }
 
   h2 {
-    color: #3C3C3C;
+    color: #3c3c3c;
     font-weight: 700;
     font-size: 13px;
     margin-top: 14px;
   }
 
   h3 {
-    color: #3C3C3C;
+    color: #3c3c3c;
     font-weight: 400;
     font-size: 14px;
     margin-top: 4px;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import * as Payment from 'payment';
+
 import Cards from 'react-credit-cards-2';
 import 'react-credit-card-component/dist/styles-compiled.css';
 import postTicketPaid from '../../../services/paymentApi';
@@ -25,13 +25,13 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
       ...cardData,
       focus: event.target.name,
     });
-  };
+  }
   function handleInputChange(event) {
     setCardData({
       ...cardData,
       [event.target.name]: event.target.value,
     });
-  };
+  }
   async function SubmitActionConfirm(e) {
     e.preventDefault();
     const newCardData = {
@@ -52,7 +52,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
     } catch (error) {
       alert('Verifique os campos de pagamento!');
     }
-  };
+  }
 
   return (
     <CreditCardWrapper>
@@ -64,7 +64,8 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
               name={cardData.name}
               expiry={cardData.expiry}
               cvc={cardData.cvc}
-              focused={cardData.focus} />
+              focused={cardData.focus}
+            />
           </MyCard>
           <MyCard2>
             <Input
@@ -102,7 +103,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
               <InputCVV
                 required
                 type="tel"
-                name='cvc'
+                name="cvc"
                 placeholder="CVV"
                 pattern="\d{3,4}"
                 maxLength={4}
@@ -113,25 +114,24 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
             </LastBox>
           </MyCard2>
         </CardBox>
-        <Button
-          type="submit"
-          onClick={(e) => SubmitActionConfirm(e)}
-        >Finalizar pagamento</Button>
+        <Button type="submit" onClick={(e) => SubmitActionConfirm(e)}>
+          Finalizar pagamento
+        </Button>
       </Form>
     </CreditCardWrapper>
   );
-};
+}
 
 const Form = styled.form``;
 const Description = styled.h3`
-color: gray;
-font-family: 'Roboto', sans-serif;
-margin: 10px 0;
+  color: gray;
+  font-family: 'Roboto', sans-serif;
+  margin: 10px 0;
 `;
 const LastBox = styled.div`
-display: flex;
-width: 295px;
-justify-content: space-between;
+  display: flex;
+  width: 295px;
+  justify-content: space-between;
 `;
 
 const CreditCardWrapper = styled.div`
@@ -177,52 +177,52 @@ const MyCard2 = styled.div`
   }
 `;
 const Input = styled.input`
-width: 294px;
-height: 40px;
-margin: 5px 0;
-font-family: 'Roboto', sans-serif;
-font-size: 1rem;
-padding: .375rem .75rem;
-font-size: 1rem;
-line-height: 1.5;
-color: #495057;
-background-color:#fff;
-background-clip: padding-box;
-border: 1px solid #ced4da;
-border-radius: .25rem;
-transition: border color .15s;
+  width: 294px;
+  height: 40px;
+  margin: 5px 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border color 0.15s;
 `;
 const InputValidThru = styled.input`
-width: 180px;
-height: 40px;
-margin: 5px 0;
-font-family: 'Roboto', sans-serif;
-font-size: 1rem;
-padding: .375rem .75rem;
-font-size: 1rem;
-line-height: 1.5;
-color: #495057;
-background-color:#fff;
-background-clip: padding-box;
-border: 1px solid #ced4da;
-border-radius: .25rem;
-transition: border color .15s;
+  width: 180px;
+  height: 40px;
+  margin: 5px 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border color 0.15s;
 `;
 const InputCVV = styled.input`
-width: 90px;
-height: 40px;
-margin: 5px 0;
-font-family: 'Roboto', sans-serif;
-font-size: 1rem;
-padding: .375rem .75rem;
-font-size: 1rem;
-line-height: 1.5;
-color: #495057;
-background-color:#fff;
-background-clip: padding-box;
-border: 1px solid #ced4da;
-border-radius: .25rem;
-transition: border color .15s;
+  width: 90px;
+  height: 40px;
+  margin: 5px 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border color 0.15s;
 `;
 const ExampleCard = styled.p`
   font-size: 16px;
@@ -252,4 +252,5 @@ const Button = styled.div`
     box-shadow: 0px 15px 20px lightgray;
     color: #000;
     transform: translateY(-7px);
-  }`;
+  }
+`;

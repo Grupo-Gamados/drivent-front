@@ -18,7 +18,7 @@ import { TicketProvider } from './contexts/TicketContext';
 import { HotelProvider } from './contexts/HotelContext';
 import { BookingProvider } from './contexts/BookingContext';
 
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+// import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 import useToken from './hooks/useToken';
 
@@ -31,33 +31,33 @@ export default function App() {
           <HotelProvider>
             <EventInfoProvider>
               <UserProvider>
-                <PayPalScriptProvider options={{ 'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
-                  <Router>
-                    <Routes>
-                      <Route path="/" element={<Countdown />} />
-                      <Route path="/enroll" element={<Enroll />} />
-                      <Route path="/sign-in" element={<SignIn />} />
+                {/* <PayPalScriptProvider options={{ 'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID }}> */}
+                <Router>
+                  <Routes>
+                    <Route path="/" element={<Countdown />} />
+                    <Route path="/enroll" element={<Enroll />} />
+                    <Route path="/sign-in" element={<SignIn />} />
 
-                      <Route
-                        path="/dashboard"
-                        element={
-                          <ProtectedRouteGuard>
-                            <Dashboard />
-                          </ProtectedRouteGuard>
-                        }
-                      >
-                        <Route path="subscription" element={<FillSubscription />} />
-                        <Route path="payment" element={<Payment />} />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRouteGuard>
+                          <Dashboard />
+                        </ProtectedRouteGuard>
+                      }
+                    >
+                      <Route path="subscription" element={<FillSubscription />} />
+                      <Route path="payment" element={<Payment />} />
 
-                        <Route path="hotel" element={<Hotel />} />
-                        <Route path="activities" element={<Activities />} />
-                        <Route path="activities/:dayId" element={<ActivitiesOfTheDay />} />
-                        <Route path="certificate" element={<Certificate />} />
-                        <Route index path="*" element={<Navigate to="/dashboard/subscription" />} />
-                      </Route>
-                    </Routes>
-                  </Router>
-                </PayPalScriptProvider>
+                      <Route path="hotel" element={<Hotel />} />
+                      <Route path="activities" element={<Activities />} />
+                      <Route path="activities/:dayId" element={<ActivitiesOfTheDay />} />
+                      <Route path="certificate" element={<Certificate />} />
+                      <Route index path="*" element={<Navigate to="/dashboard/subscription" />} />
+                    </Route>
+                  </Routes>
+                </Router>
+                {/* </PayPalScriptProvider> */}
               </UserProvider>
             </EventInfoProvider>
           </HotelProvider>

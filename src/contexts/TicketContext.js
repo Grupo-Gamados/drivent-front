@@ -8,6 +8,7 @@ export function TicketProvider({ children }) {
   const [ticketTypeSelected, setTicketTypeSelected] = useState('');
   const [includesHotel, setIncludesHotel] = useState('');
   const [ticketReserved, setTicketReserved] = useState({});
+  const [ reloadTicket, setReloadTicket ] = useState(false);
   return (
     <TicketContext.Provider
       value={{
@@ -17,6 +18,8 @@ export function TicketProvider({ children }) {
         setIncludesHotel,
         ticketReserved,
         setTicketReserved,
+        reloadTicket,
+        setReloadTicket
       }}
     >
       {children}

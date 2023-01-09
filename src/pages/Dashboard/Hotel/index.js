@@ -13,12 +13,12 @@ import BookingContext from '../../../contexts/BookingContext';
 
 export default function Hotel() {
   const { ticket } = useTicket();
-  const { hotelSelected, reloadHotels } = useContext(HotelContext);
+  const { hotelSelected, reloadHotels, isHotelBooked } = useContext(HotelContext);
   const { isChangingBooking } = useContext(BookingContext);
   const { booking } = useBooking();
 
   useEffect( () => {
-  }, [reloadHotels]);
+  }, [reloadHotels, hotelSelected]);
 
   function wrongTicketMessage() {
     if (ticket) {
@@ -28,7 +28,7 @@ export default function Hotel() {
     }
   }
 
-  if (ticket && booking && booking.Room && !isChangingBooking) {
+  if ((ticket && booking && booking.Room && !isChangingBooking) || (isHotelBooked && ticket && ticket.status.toLowerCase() === 'paid')) {
     return (
       <>
         <Title>Escolha de hotel e quarto</Title>

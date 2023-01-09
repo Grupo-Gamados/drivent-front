@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import BookingContext from '../../../contexts/BookingContext';
 import useBooking from '../../../hooks/api/useBooking';
 import HotelContext from '../../../contexts/HotelContext';
+import { toast } from 'react-toastify';
 
 export default function ChangeBookingButton() {
   const token = useToken();
@@ -17,10 +18,15 @@ export default function ChangeBookingButton() {
       setIsChangingBooking(!isChangingBooking);
     }
     else {
-      await changeBooking(token, booking.id, bookingSelectedId);
-      setIsChangingBooking(!isChangingBooking);
-      setReloadHotels(!reloadHotels);
-      resetHotelOptions();
+      try {
+        await changeBooking(token, booking.id, bookingSelectedId);
+        setIsChangingBooking(!isChangingBooking);
+        setReloadHotels(!reloadHotels);
+        resetHotelOptions();
+        toast('Reserva de quarto alterada com sucesso!');
+      } catch (error) {
+        toast('Houve um erro ao tentar alterar a reserva. Por favor, tente novamente.');
+      }
     }
   }
 

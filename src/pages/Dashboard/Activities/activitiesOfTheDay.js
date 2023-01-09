@@ -55,6 +55,7 @@ export default function ActivitiesOfTheDay() {
     try {
       await activitiesApi.postRegister(token, activityId);
       setReload(Math.floor(Math.random() * 65536));
+      toast('Oba! Inscrição realizada com sucesso!');
     } catch (error) {
       toast('Ops... Você já se inscreveu em outra atividade neste mesmo horário');
     }

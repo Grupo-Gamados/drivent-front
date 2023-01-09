@@ -11,19 +11,19 @@ import CreditCard from './CreditCard';
 export default function Payment() {
   const { ticket } = useTicket();
   const [userTicket, setUserTicket] = useState({});
-  const { setTicketReserved } = useContext(TicketContext);
+  const { setTicketReserved, reloadTicket } = useContext(TicketContext);
 
   useEffect(() => {
     if (ticket) {
       setUserTicket(ticket);
       setTicketReserved(ticket);
     }
-  }, [userTicket]);
+  }, [userTicket, reloadTicket]);
 
   return (
     <>
       <Title>Ingresso e pagamento</Title>
-      {ticket ? (
+      {ticket || reloadTicket ? (
         <>
           <ChosenTicket />
           <CreditCard />

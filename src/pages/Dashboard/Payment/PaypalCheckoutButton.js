@@ -54,7 +54,6 @@ const PaypalCheckoutButton = (props) => {
           onCancel={() => { }}
           onError={(err) => {
             setError();
-            console.log('Erro no pagamento!', err);
           }}
         />
       </BoxPayPal>

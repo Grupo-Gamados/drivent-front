@@ -17,7 +17,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
     cvc: '',
     focus: '',
   });
-  const [focus, setFocus] = useState('');
+
   function handleInputFocus(event) {
     setCardData({
       ...cardData,
@@ -50,7 +50,6 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
       setShowPaymentForm(false);
     } catch (error) {
       toast('Não foi possível salvar suas informações!');
-      console.log(error);
     }
   }
 
@@ -223,12 +222,6 @@ const InputCVV = styled.input`
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border color 0.15s;
-`;
-const ExampleCard = styled.p`
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: gray;
 `;
 
 const Button = styled.div`

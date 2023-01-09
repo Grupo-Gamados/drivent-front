@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import { toast } from 'react-toastify';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-card-component/dist/styles-compiled.css';
-import postTicketPaid from '../../../services/paymentApi';
+import * as paymentApi from '../../../services/paymentApi';
 import useToken from '../../../hooks/useToken';
-import useSavePayment from '../../../services/hookPayment';
 
 export default function PaymentForm({ ticketData, setShowPaymentForm }) {
   const token = useToken();
-  const { postTicketPaid } = useSavePayment();
+
   const ticketId = ticketData?.id;
-  const [issuer, setIssuer] = useState('');
   const [cardData, setCardData] = useState({
     number: '',
     name: '',
@@ -19,7 +17,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
     cvc: '',
     focus: '',
   });
-  const [focus, setFocus] = useState('');
+
   function handleInputFocus(event) {
     setCardData({
       ...cardData,
@@ -34,6 +32,7 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
   }
   async function SubmitActionConfirm(e) {
     e.preventDefault();
+    const issuer = cardData.number.substring(0, 2);
     const newCardData = {
       ...cardData,
       issuer,
@@ -46,11 +45,11 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
       cardData: { ...newCardData },
     };
     try {
-      const result = postTicketPaid({ paymentBody });
-      alert('Ticket pago com sucesso!');
+      await paymentApi.postTicketPaid(token, paymentBody);
+      toast('Informações salvas com sucesso!');
       setShowPaymentForm(false);
     } catch (error) {
-      alert('Verifique os campos de pagamento!');
+      toast('Não foi possível salvar suas informações!');
     }
   }
 
@@ -223,12 +222,6 @@ const InputCVV = styled.input`
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border color 0.15s;
-`;
-const ExampleCard = styled.p`
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: gray;
 `;
 
 const Button = styled.div`

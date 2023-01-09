@@ -1,6 +1,6 @@
-import postTicketPaid, * as paymentApi from '../services/paymentApi';
-import useAsync from '../hooks/useAsync';
-import useToken from '../hooks/useToken';
+import useAsync from '../useAsync';
+import useToken from '../useToken';
+import * as paymentApi from '../../services/paymentApi';
 
 export default function useSavePayment() {
   const token = useToken();
@@ -16,4 +16,4 @@ export default function useSavePayment() {
     savePaymentError,
     savePayment,
   };
-};
+}

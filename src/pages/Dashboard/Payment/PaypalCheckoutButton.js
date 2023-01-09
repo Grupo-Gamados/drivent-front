@@ -48,13 +48,11 @@ const PaypalCheckoutButton = (props) => {
           }}
           onApprove={(data, action) => {
             const order = action.order.capture();
-            console.log('order', order);
             handleApprove(data.orderID);
           }}
           onCancel={() => { }}
           onError={(err) => {
             setError();
-            console.log('Erro no pagamento!', err);
           }}
         />
       </BoxPayPal>

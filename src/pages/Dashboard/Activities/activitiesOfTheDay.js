@@ -7,6 +7,7 @@ import React from 'react';
 import vacancies from '../../../assets/images/vagas.svg';
 import soldOff from '../../../assets/images/lotado.svg';
 import registered from '../../../assets/images/registered.svg';
+import { toast } from 'react-toastify';
 
 import { Title, DaysBox, Button } from './index';
 
@@ -16,6 +17,7 @@ export default function ActivitiesOfTheDay() {
   const { dayId } = useParams();
   const dayIdNum = parseInt(dayId);
   const [listActivities, setListActivities] = React.useState([]);
+  const [reload, setReload] = React.useState(1);
 
   const actsAudPrincipal = listActivities.filter((act) => act.localId === 1);
   const actsAudLateral = listActivities.filter((act) => act.localId === 2);
@@ -40,18 +42,21 @@ export default function ActivitiesOfTheDay() {
     );
   }
 
-  // eslint-disable-next-line space-before-function-paren
-  React.useEffect(async () => {
-    const response = await activitiesApi.getActivities(token, dayIdNum);
-    setListActivities(response.data);
-  }, [dayIdNum]);
+  React.useEffect(
+    // eslint-disable-next-line space-before-function-paren
+    async () => {
+      const response = await activitiesApi.getActivities(token, dayIdNum);
+      setListActivities(response.data);
+    },
+    [dayIdNum, reload]
+  );
 
   async function postRegister(activityId) {
     try {
       await activitiesApi.postRegister(token, activityId);
-      window.location.reload(false);
+      setReload(Math.floor(Math.random() * 65536));
     } catch (error) {
-      alert('Você já se inscreveu em outra atividade que conflita com o horário desta');
+      toast('Ops... Você já se inscreveu em outra atividade neste mesmo horário');
     }
   }
 

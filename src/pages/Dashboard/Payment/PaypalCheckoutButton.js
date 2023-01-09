@@ -4,7 +4,7 @@ import { PayPalButtons } from '@paypal/react-paypal-js';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 const PaypalCheckoutButton = (props) => {
-  const { products } = props;
+  const { product } = props;
 
   const [paidFor, setPaidFor] = useState(false);
   const [error, setError] = useState(null);
@@ -38,16 +38,17 @@ const PaypalCheckoutButton = (props) => {
             return actions.order.create({
               purchase_units: [
                 {
-                  description: products.description,
+                  description: product.description,
                   amount: {
-                    value: products.price,
+                    value: product.price,
                   },
                 },
               ],
             });
           }}
-          onApprove={(data, action) => {
-            const order = action.order.capture();
+          onApprove={async function my(data, action) {
+            const order = await action.order.capture();
+            console.log('order', order);
             handleApprove(data.orderID);
           }}
           onCancel={() => { }}

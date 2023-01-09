@@ -4,15 +4,22 @@ import BookingContext from '../../../contexts/BookingContext';
 import HotelContext from '../../../contexts/HotelContext';
 import useToken from '../../../hooks/useToken';
 import { postBooking } from '../../../services/bookingApi';
+import { toast } from 'react-toastify';
 
 export default function BookingButton() {
   const { bookingSelectedId } = useContext(BookingContext);
-  const { reloadHotels, setReloadHotels } = useContext(HotelContext);
+  const { reloadHotels, setReloadHotels, setIsHotelBooked } = useContext(HotelContext);
 
   const token = useToken();
   async function createBooking() {
-    await postBooking(token, bookingSelectedId);
-    setReloadHotels(!reloadHotels);
+    try {
+      await postBooking(token, bookingSelectedId);
+      setIsHotelBooked(true);
+      setReloadHotels(!reloadHotels);
+      toast('Quarto reservado com sucesso!');
+    } catch (error) {
+      toast('Houve um erro ao tentar realizar a reserva. Por favor, tente novamente.');
+    }
   }
 
   return <Button onClick={createBooking}>RESERVAR QUARTO</Button>;

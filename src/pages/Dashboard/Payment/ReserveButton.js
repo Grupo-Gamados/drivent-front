@@ -5,14 +5,20 @@ import SubTitle from './Subtitle';
 import { postTicket } from '../../../services/ticketApi';
 import useToken from '../../../hooks/useToken';
 import useTicketType from '../../../hooks/api/useTicketType';
+import { toast } from 'react-toastify';
 
 export default function ReserveButton() {
-  const { ticketTypeSelected, includesHotel } = useContext(TicketContext);
+  const { ticketTypeSelected, includesHotel, reloadTicket, setReloadTicket } = useContext(TicketContext);
   const { ticketTypes } = useTicketType();
   const token = useToken();
   async function createTicket(ticketTypeId) {
-    await postTicket(ticketTypeId, token);
-    window.location.reload(false);
+    try {
+      await postTicket(ticketTypeId, token);
+      toast('Ticket reservado com sucesso!');
+      setReloadTicket(!reloadTicket);
+    } catch (error) {
+      toast('Não foi possível reservar o ticket. Por favor, tente novamente.');
+    }
   }
 
   return ticketTypes ? (

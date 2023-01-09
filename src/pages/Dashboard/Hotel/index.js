@@ -4,16 +4,21 @@ import Title from './Title';
 import SubTitle from './Subtitle';
 import useTicket from '../../../hooks/api/useTicket';
 import Message from './Message';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import HotelContext from '../../../contexts/HotelContext';
 import useBooking from '../../../hooks/api/useBooking';
 import BookedHotel from './BookedHotel';
 import ChangeBookingButton from './ChangeBookingButton';
+import BookingContext from '../../../contexts/BookingContext';
 
 export default function Hotel() {
   const { ticket } = useTicket();
-  const { hotelSelected } = useContext(HotelContext);
+  const { hotelSelected, reloadHotels } = useContext(HotelContext);
+  const { isChangingBooking } = useContext(BookingContext);
   const { booking } = useBooking();
+
+  useEffect( () => {
+  }, [reloadHotels]);
 
   function wrongTicketMessage() {
     if (ticket) {
@@ -23,7 +28,7 @@ export default function Hotel() {
     }
   }
 
-  if (ticket && booking && booking.Room) {
+  if (ticket && booking && booking.Room && !isChangingBooking) {
     return (
       <>
         <Title>Escolha de hotel e quarto</Title>
@@ -39,7 +44,7 @@ export default function Hotel() {
       <Title>Escolha de hotel e quarto</Title>
       {ticket.status.toLowerCase() === 'paid' && ticket.TicketType.includesHotel ? (
         <>
-          <SubTitle>Primeiro, escolha seu hotel</SubTitle>
+          <SubTitle>{!isChangingBooking? 'Primeiro, escolha seu hotel' : 'Escolha seu novo hotel'}</SubTitle>
           <Hotels></Hotels>
           {hotelSelected ? <Rooms /> : ''}
         </>

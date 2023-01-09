@@ -1,15 +1,18 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import BookingContext from '../../../contexts/BookingContext';
+import HotelContext from '../../../contexts/HotelContext';
 import useToken from '../../../hooks/useToken';
 import { postBooking } from '../../../services/bookingApi';
 
 export default function BookingButton() {
   const { bookingSelectedId } = useContext(BookingContext);
+  const { reloadHotels, setReloadHotels } = useContext(HotelContext);
 
   const token = useToken();
   async function createBooking() {
     await postBooking(token, bookingSelectedId);
+    setReloadHotels(!reloadHotels);
   }
 
   return <Button onClick={createBooking}>RESERVAR QUARTO</Button>;
@@ -29,7 +32,9 @@ const Button = styled.div`
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
   background-color: lightgray;
-  border: none;
+  background: #e0e0e0;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
   outline: none;
   :hover {
     background-color: #ffeed2;

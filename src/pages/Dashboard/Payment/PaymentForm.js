@@ -32,6 +32,15 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
   }
   async function SubmitActionConfirm(e) {
     e.preventDefault();
+    if (
+      cardData.number.length === 0 ||
+      cardData.cvc.length === 0 ||
+      cardData.name.length === 0 ||
+      cardData.expiry === 0
+    ) {
+      toast('Preencha todos os campos!');
+      return;
+    }
     const issuer = cardData.number.substring(0, 2);
     const newCardData = {
       ...cardData,
@@ -46,10 +55,10 @@ export default function PaymentForm({ ticketData, setShowPaymentForm }) {
     };
     try {
       await paymentApi.postTicketPaid(token, paymentBody);
-      toast('Informações salvas com sucesso!');
+      toast('Pagamento confirmado!');
       setShowPaymentForm(false);
     } catch (error) {
-      toast('Não foi possível salvar suas informações!');
+      toast('Oops, algo não deu certo!');
     }
   }
 

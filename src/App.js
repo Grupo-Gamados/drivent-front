@@ -18,8 +18,6 @@ import { TicketProvider } from './contexts/TicketContext';
 import { HotelProvider } from './contexts/HotelContext';
 import { BookingProvider } from './contexts/BookingContext';
 
-// import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-
 import useToken from './hooks/useToken';
 
 export default function App() {
@@ -31,7 +29,6 @@ export default function App() {
           <HotelProvider>
             <EventInfoProvider>
               <UserProvider>
-                {/* <PayPalScriptProvider options={{ 'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID }}> */}
                 <Router>
                   <Routes>
                     <Route path="/" element={<Countdown />} />
@@ -57,7 +54,6 @@ export default function App() {
                     </Route>
                   </Routes>
                 </Router>
-                {/* </PayPalScriptProvider> */}
               </UserProvider>
             </EventInfoProvider>
           </HotelProvider>

@@ -1,16 +1,18 @@
 import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import HotelContext from '../../../contexts/HotelContext';
+import useBooking from '../../../hooks/api/useBooking';
 import useRooms from '../../../hooks/api/useRooms';
 
 export default function HotelWrapper({ img, title, id }) {
   const [isSelected, setIsSelected] = useState(false);
   const { hotelSelected, setHotelSelected, setHotelSelectedId } = useContext(HotelContext);
+  const { booking } = useBooking();
   const { roomsByHotel } = useRooms(id);
   let hotelDescription = 'Single';
   let vacancies = 0;
   function getRoomDescription() {
-    if (roomsByHotel) {
+    if (roomsByHotel && booking) {
       roomsByHotel.Rooms.forEach((room) => {
         vacancies += Number(room.capacity);
         if (hotelDescription !== 'Single, Double e Triple' && Number(room.capacity) >= 3) {
@@ -18,6 +20,11 @@ export default function HotelWrapper({ img, title, id }) {
         } else if (hotelDescription !== 'Single e Double' && Number(room.capacity) === 2) {
           hotelDescription = 'Single e Double';
         }
+        booking.bookingList.forEach((book) => {
+          if (book.roomId === room.id) {
+            vacancies--;
+          }
+        });
       });
     }
   }

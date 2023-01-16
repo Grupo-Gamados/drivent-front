@@ -12,12 +12,13 @@ async function redirectToGithub() {
   const params = {
     response_type: 'code',
     scope: 'user:email',
-    client_id: 'e0de154d4404bc47e4e8',
-    redirect_uri: 'http://localhost:3000/dashboard/subscription'
+    client_id: '30ee3c6e385e1e67e52f',
+    redirect_uri: 'http://localhost:3000/sign-in',
   };
-  
-  const queryString = '?' + new URLSearchParams(params).toString();
-  window.location.href = `${GITHUB_URL}?${queryString}`;
+
+  const queryStrings = '?' + new URLSearchParams(params).toString();
+  const authURL = `${GITHUB_URL}?${queryStrings}`;
+  window.location.href = authURL;
 }
 
 export default function GithubButton({ variant = 'contained', children, ...props }) {
@@ -32,7 +33,7 @@ export default function GithubButton({ variant = 'contained', children, ...props
         const userData = await signInUsingGitHub(code);
         setUserData(userData);
         toast('Login realizado com sucesso!');
-        navigate('/dashboard');
+        navigate('/dashboard/subscription');
       } catch (error) {
         toast('Não foi possível fazer o login!');
       }
@@ -55,4 +56,5 @@ const StyledMuiButton = styled(MuiButton)`
 const GitHubIcon = styled(AiFillGithub)`
   margin: 0 5px 5px 0;
   font-size: 20px;
+  transform: translateY(2px);
 `;
